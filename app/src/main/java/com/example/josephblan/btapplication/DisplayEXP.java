@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public class DisplayEXP extends AppCompatActivity {
     ListView lvEXP;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

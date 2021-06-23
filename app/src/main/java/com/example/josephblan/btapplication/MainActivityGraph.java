@@ -111,7 +111,7 @@ public class MainActivityGraph extends Activity {
             return n;
         }
         public void onClick(View view) {
-            Intent i = new Intent(this, DisplayEXP.class);
+            Intent i = new Intent(this, MainActivityGraph.class);
             startActivity(i);
         }
     }
