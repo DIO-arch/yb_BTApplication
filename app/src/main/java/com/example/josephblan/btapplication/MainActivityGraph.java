@@ -59,8 +59,8 @@ public class MainActivityGraph extends Activity {
             setContentView(R.layout.activity_main_graph);
             instance = this;
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-
-            start = 1;//default settings
+            //settings
+            start = 1;
             end = 20;
             ymin = 0;
             ymax = 256;
@@ -74,8 +74,6 @@ public class MainActivityGraph extends Activity {
             gv.getViewport().setMinY(ymin);
             gv.getViewport().setMaxY(ymax);
 
-
-//----------------
             DataPoint[] dp = new DataPoint[n.length];
             int s;
             for (s = 0; s < dp.length; s++){
