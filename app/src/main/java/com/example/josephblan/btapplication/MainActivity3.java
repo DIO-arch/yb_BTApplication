@@ -59,17 +59,13 @@ public class MainActivity3 extends Activity {
 
         findViewByIdes();
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-
         if(!bluetoothAdapter.isEnabled()) {
             Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableIntent,REQUEST_ENABLE_BLUETOOTH);
         }
-
         implementListeners();
     }
-
     private void implementListeners() {
-
         listDevices.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -77,11 +73,8 @@ public class MainActivity3 extends Activity {
                 String[] strings = new String[bt.size()];
                 btArray = new BluetoothDevice[bt.size()];
                 int index = 0;
-
-                if( bt.size()>0)
-                {
-                    for(BluetoothDevice device : bt)
-                    {
+                if(bt.size()>0) {
+                    for(BluetoothDevice device : bt) {
                         btArray[index] = device;
                         strings[index] = device.getName();
                         index++;
@@ -91,7 +84,6 @@ public class MainActivity3 extends Activity {
                 }
             }
         });
-
         listen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -99,7 +91,6 @@ public class MainActivity3 extends Activity {
                 serverClass.start();
             }
         });
-
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -109,7 +100,6 @@ public class MainActivity3 extends Activity {
                 status.setText("Connecting");
             }
         });
-
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -119,13 +109,10 @@ public class MainActivity3 extends Activity {
             }
         });
     }
-
     Handler handler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message msg) {
-
-            switch (msg.what)
-            {
+            switch (msg.what) {
                 case STATE_LISTENING:
                     status.setText("Listening");
                     break;
@@ -145,16 +132,13 @@ public class MainActivity3 extends Activity {
 
                     Toast.makeText(MainActivity3.this, "We got :"+tempMsg, Toast.LENGTH_SHORT).show();
 
-                    //------------------------------------
                     Intent i = new Intent(MainActivity3.this, MainActivityGraph.class);
                     startActivity(i);
-
                     break;
             }
             return true;
         }
     });
-
     private void findViewByIdes() {
         listen = (Button) findViewById(R.id.listen);
         send = (Button) findViewById(R.id.send);
@@ -164,7 +148,6 @@ public class MainActivity3 extends Activity {
         writeMsg = (EditText) findViewById(R.id.writemsg);
         listDevices = (Button) findViewById(R.id.listDevices);
     }
-
     private class ServerClass extends Thread
     {
         private BluetoothServerSocket serverSocket;
@@ -176,13 +159,9 @@ public class MainActivity3 extends Activity {
                 e.printStackTrace();
             }
         }
-
-        public void run()
-        {
+        public void run() {
             BluetoothSocket socket = null;
-
-            while (socket == null)
-            {
+            while (socket == null) {
                 try {
                     Message message = Message.obtain();
                     message.what = STATE_CONNECTING;
@@ -195,9 +174,7 @@ public class MainActivity3 extends Activity {
                     message.what = STATE_CONNECTION_FAILED;
                     handler.sendMessage(message);
                 }
-
-                if(socket!=null)
-                {
+                if(socket!=null) {
                     Message message = Message.obtain();
                     message.what = STATE_CONNECTED;
                     handler.sendMessage(message);
@@ -211,13 +188,11 @@ public class MainActivity3 extends Activity {
         }
     }
 
-    private class ClientClass extends Thread
-    {
+    private class ClientClass extends Thread {
         private BluetoothDevice device;
         private BluetoothSocket socket;
 
-        public ClientClass (BluetoothDevice device1)
-        {
+        public ClientClass (BluetoothDevice device1) {
             device = device1;
 
             try {
@@ -227,8 +202,7 @@ public class MainActivity3 extends Activity {
             }
         }
 
-        public void run()
-        {
+        public void run() {
             try {
                 socket.connect();
                 Message message = Message.obtain();
@@ -237,7 +211,6 @@ public class MainActivity3 extends Activity {
 
                 sendReceive = new SendReceive(socket);
                 sendReceive.start();
-
             } catch (IOException e) {
                 e.printStackTrace();
                 Message message = Message.obtain();
@@ -247,14 +220,12 @@ public class MainActivity3 extends Activity {
         }
     }
 
-    private class SendReceive extends Thread
-    {
+    private class SendReceive extends Thread {
         private final BluetoothSocket bluetoothSocket;
         private final InputStream inputStream;
         private final OutputStream outputStream;
 
-        public SendReceive (BluetoothSocket socket)
-        {
+        public SendReceive (BluetoothSocket socket) {
             bluetoothSocket = socket;
             InputStream tempIn = null;
             OutputStream tempOut = null;
@@ -265,18 +236,15 @@ public class MainActivity3 extends Activity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
             inputStream = tempIn;
             outputStream = tempOut;
         }
 
-        public void run()
-        {
+        public void run() {
             byte[] buffer = new byte[1024];
             int bytes;
 
-            while (true)
-            {
+            while (true) {
                 try {
                     bytes = inputStream.read(buffer);
                     handler.obtainMessage(STATE_MESSAGE_RECEIVED, bytes, -1, buffer).sendToTarget();
@@ -285,9 +253,7 @@ public class MainActivity3 extends Activity {
                 }
             }
         }
-
-        public void write(byte[] bytes)
-        {
+        public void write(byte[] bytes) {
             try { outputStream.write(bytes); }
             catch (IOException e) { e.printStackTrace(); }
         }
