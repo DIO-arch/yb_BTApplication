@@ -60,8 +60,7 @@ public class MainActivity3 extends Activity {
         findViewByIdes();
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
-        if(!bluetoothAdapter.isEnabled())
-        {
+        if(!bluetoothAdapter.isEnabled()) {
             Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableIntent,REQUEST_ENABLE_BLUETOOTH);
         }
@@ -144,10 +143,7 @@ public class MainActivity3 extends Activity {
                     String tempMsg = new String(readBuff,0,msg.arg1);
                     msg_box.setText(tempMsg);
 
-
                     Toast.makeText(MainActivity3.this, "We got :"+tempMsg, Toast.LENGTH_SHORT).show();
-
-
 
                     //------------------------------------
                     Intent i = new Intent(MainActivity3.this, MainActivityGraph.class);
@@ -202,7 +198,7 @@ public class MainActivity3 extends Activity {
 
                 if(socket!=null)
                 {
-                    Message message=Message.obtain();
+                    Message message = Message.obtain();
                     message.what = STATE_CONNECTED;
                     handler.sendMessage(message);
 
